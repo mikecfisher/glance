@@ -14,6 +14,21 @@ export default defineContentScript({
     const cache = new Map<string, { summary?: string; error?: string }>();
     let activeOverlay: { videoId: string; remove: () => void } | null = null;
 
+    // Intercept clicks on Glance buttons during capture phase,
+    // before YouTube's SPA navigation can process them.
+    const clickGuard = (e: MouseEvent) => {
+      const target = e.target;
+      if (target instanceof Element) {
+        const btn = target.closest(`.${BUTTON_CLASS}`);
+        if (btn) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          btn.dispatchEvent(new CustomEvent("glance-click", { bubbles: false }));
+        }
+      }
+    };
+    window.addEventListener("click", clickGuard, true);
+
     function scanAndInject() {
       const thumbnails = document.querySelectorAll(
         "yt-thumbnail-view-model, ytd-thumbnail:not([hidden])",
@@ -101,9 +116,7 @@ export default defineContentScript({
         btn.style.background = "rgba(0, 0, 0, 0.6)";
       });
 
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      btn.addEventListener("glance-click", () => {
         handleClick(videoId, thumbnailEl);
       });
 
@@ -317,6 +330,7 @@ export default defineContentScript({
 
     // Cleanup on context invalidation
     ctx.onInvalidated(() => {
+      window.removeEventListener("click", clickGuard, true);
       observer.disconnect();
       if (activeOverlay) {
         activeOverlay.remove();
