@@ -2,8 +2,8 @@ import { defineConfig } from "wxt";
 
 export default defineConfig({
   manifest: {
-    name: "YouTube Preview Summarizer",
-    description: "Summarize YouTube videos from their thumbnails using AI",
+    name: "Glance",
+    description: "AI-powered video summaries, right from the thumbnail",
     permissions: ["storage"],
     host_permissions: [
       "*://www.youtube.com/*",

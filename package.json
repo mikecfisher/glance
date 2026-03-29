@@ -1,8 +1,8 @@
 {
-  "name": "youtube-preview-summarizer",
+  "name": "glance",
   "version": "1.0.0",
   "private": true,
-  "description": "Summarize YouTube videos from their thumbnails using AI",
+  "description": "AI-powered video summaries, right from the thumbnail",
   "type": "module",
   "scripts": {
     "dev": "wxt",
