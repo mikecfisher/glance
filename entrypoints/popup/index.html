@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Preview Summarizer</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h2>YouTube Preview Summarizer</h2>
+
+    <div class="field">
+      <label for="api-key">Anthropic API Key</label>
+      <input type="password" id="api-key" placeholder="sk-ant-..." />
+    </div>
+
+    <div class="field">
+      <label for="model">Model</label>
+      <select id="model"></select>
+    </div>
+
+    <div class="field">
+      <label for="prompt">
+        Summary Prompt
+        <button type="button" id="reset-prompt" class="link-btn">Reset</button>
+      </label>
+      <textarea id="prompt" rows="4"></textarea>
+    </div>
+
+    <button id="save-btn">Save Settings</button>
+    <div id="status" class="status"></div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

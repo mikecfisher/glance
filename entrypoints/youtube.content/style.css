@@ -1,0 +1,123 @@
+/* Overlay styles — injected into shadow DOM via cssInjectionMode: 'ui' */
+
+.overlay-root {
+  font-family: "YouTube Noto", Roboto, Arial, sans-serif;
+  background: #fff;
+  color: #0f0f0f;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  padding: 14px 16px;
+  max-width: 380px;
+  min-width: 260px;
+  line-height: 1.5;
+  font-size: 13px;
+  position: relative;
+}
+
+.overlay-root.dark {
+  background: #212121;
+  color: #e8e8e8;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.overlay-title {
+  font-weight: 600;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.overlay-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 18px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.5;
+}
+
+.overlay-close:hover {
+  opacity: 1;
+}
+
+.overlay-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  opacity: 0.7;
+  padding: 8px 0;
+}
+
+.overlay-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(128, 128, 128, 0.3);
+  border-top-color: #5555ff;
+  border-radius: 50%;
+  animation: ytps-spin 0.8s linear infinite;
+}
+
+@keyframes ytps-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.overlay-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.overlay-body ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+
+.overlay-body li {
+  margin-bottom: 4px;
+}
+
+.overlay-body p {
+  margin: 0 0 6px;
+}
+
+.overlay-body strong {
+  font-weight: 600;
+}
+
+.overlay-error {
+  color: #d93025;
+  padding: 4px 0;
+}
+
+.overlay-root.dark .overlay-error {
+  color: #f28b82;
+}
+
+/* Scrollbar */
+.overlay-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.overlay-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.overlay-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overlay-body::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 3px;
+}
