@@ -1,7 +1,11 @@
 export interface Settings {
   apiKey: string;
   model: string;
-  customPrompt: string;
+}
+
+export interface Message {
+  role: "user" | "assistant";
+  content: string;
 }
 
 export interface CaptionTrack {

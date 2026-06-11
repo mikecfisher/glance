@@ -1,123 +1,261 @@
-/* Overlay styles — injected into shadow DOM via cssInjectionMode: 'ui' */
+/* Drawer styles — injected into shadow DOM via cssInjectionMode: 'ui' */
 
-.overlay-root {
-  font-family: "YouTube Noto", Roboto, Arial, sans-serif;
-  background: #fff;
-  color: #0f0f0f;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
-  padding: 14px 16px;
-  max-width: 380px;
-  min-width: 260px;
-  line-height: 1.5;
-  font-size: 13px;
-  position: relative;
+/* Backdrop */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  z-index: 1;
 }
 
-.overlay-root.dark {
-  background: #212121;
-  color: #e8e8e8;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-}
-
-.overlay-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.overlay-title {
-  font-weight: 600;
-  font-size: 13px;
-  opacity: 0.7;
-}
-
-.overlay-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px 6px;
-  font-size: 18px;
-  line-height: 1;
-  color: inherit;
-  opacity: 0.5;
-}
-
-.overlay-close:hover {
+.drawer-backdrop.open {
   opacity: 1;
 }
 
-.overlay-loading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: inherit;
-  opacity: 0.7;
-  padding: 8px 0;
+.drawer-backdrop.closing {
+  opacity: 0;
 }
 
-.overlay-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(128, 128, 128, 0.3);
+/* Panel */
+.drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: 100vh;
+  background: #fff;
+  color: #0f0f0f;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  transform: translateX(100%);
+  transition: transform 200ms ease;
+  display: flex;
+  flex-direction: column;
+  font-family: "YouTube Noto", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  z-index: 2;
+}
+
+.drawer-panel.open {
+  transform: translateX(0);
+}
+
+.drawer-panel.closing {
+  transform: translateX(100%);
+}
+
+/* Dark mode */
+.drawer-panel.dark {
+  background: #212121;
+  color: #e8e8e8;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Header */
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+  flex-shrink: 0;
+}
+
+.drawer-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.drawer-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 20px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.6;
+  border-radius: 4px;
+}
+
+.drawer-close:hover {
+  opacity: 1;
+  background: rgba(128, 128, 128, 0.15);
+}
+
+/* Body — scrollable */
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Summary content */
+.drawer-body ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.drawer-body li {
+  margin-bottom: 8px;
+}
+
+.drawer-body p {
+  margin: 0 0 10px;
+}
+
+.drawer-body strong {
+  font-weight: 600;
+}
+
+/* Loading */
+.drawer-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 0;
+  opacity: 0.7;
+}
+
+.drawer-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid rgba(128, 128, 128, 0.3);
   border-top-color: #5555ff;
   border-radius: 50%;
-  animation: ytps-spin 0.8s linear infinite;
+  animation: drawer-spin 0.8s linear infinite;
 }
 
-@keyframes ytps-spin {
+@keyframes drawer-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-.overlay-body {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.overlay-body ul {
-  margin: 4px 0;
-  padding-left: 18px;
-}
-
-.overlay-body li {
-  margin-bottom: 4px;
-}
-
-.overlay-body p {
-  margin: 0 0 6px;
-}
-
-.overlay-body strong {
-  font-weight: 600;
-}
-
-.overlay-error {
+/* Error */
+.drawer-error {
   color: #d93025;
-  padding: 4px 0;
+  padding: 20px;
 }
 
-.overlay-root.dark .overlay-error {
+.drawer-panel.dark .drawer-error {
   color: #f28b82;
 }
 
+/* Reply loading (smaller, inline) */
+.drawer-reply-loading {
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 8px 0;
+}
+
+.drawer-reply-loading .drawer-spinner {
+  width: 16px;
+  height: 16px;
+}
+
+/* Footer input */
+.drawer-footer {
+  padding: 12px 20px;
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  flex-shrink: 0;
+}
+
+.drawer-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.drawer-input {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  background: transparent;
+  color: inherit;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+
+.drawer-input:focus {
+  border-color: #5555ff;
+}
+
+.drawer-input::placeholder {
+  opacity: 0.5;
+}
+
+.drawer-send {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #5555ff;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.drawer-send:hover {
+  background: #4444dd;
+}
+
+.drawer-send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Follow-up messages */
+.drawer-message {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.drawer-message-user {
+  font-weight: 500;
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.drawer-message-assistant ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.drawer-message-assistant li {
+  margin-bottom: 8px;
+}
+
+.drawer-message-assistant p {
+  margin: 0 0 10px;
+}
+
+.drawer-message-assistant strong {
+  font-weight: 600;
+}
+
 /* Scrollbar */
-.overlay-body {
-  max-height: 300px;
-  overflow-y: auto;
+.drawer-body::-webkit-scrollbar {
+  width: 6px;
 }
 
-.overlay-body::-webkit-scrollbar {
-  width: 5px;
-}
-
-.overlay-body::-webkit-scrollbar-track {
+.drawer-body::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.overlay-body::-webkit-scrollbar-thumb {
+.drawer-body::-webkit-scrollbar-thumb {
   background: rgba(128, 128, 128, 0.3);
   border-radius: 3px;
 }

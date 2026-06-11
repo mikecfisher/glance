@@ -1,5 +1,5 @@
-import type { SummarizeResponse } from "@/utils/types";
-import { summarize } from "@/utils/claude";
+import type { SummarizeResponse, Message } from "@/utils/types";
+import { summarize, followUp } from "@/utils/claude";
 import { settingsStorage } from "@/utils/storage";
 
 interface SummarizeTextRequest {
@@ -8,29 +8,39 @@ interface SummarizeTextRequest {
   title: string;
 }
 
-export default defineBackground(() => {
-  console.log("[YTPS] Background service worker started");
+interface FollowUpRequest {
+  type: "FOLLOW_UP";
+  messages: Message[];
+  captions: string;
+  title: string;
+}
 
+type BackgroundRequest = SummarizeTextRequest | FollowUpRequest;
+
+export default defineBackground(() => {
   browser.runtime.onMessage.addListener(
     (
-      message: SummarizeTextRequest,
+      message: BackgroundRequest,
       _sender: browser.runtime.MessageSender,
       sendResponse: (response: SummarizeResponse) => void,
     ) => {
-      if (message.type !== "SUMMARIZE_TEXT") return;
+      if (message.type === "SUMMARIZE_TEXT") {
+        handleSummarize(message.text, message.title)
+          .then(sendResponse)
+          .catch((err: Error) => {
+            sendResponse({ success: false, error: err.message });
+          });
+        return true;
+      }
 
-      console.log(
-        `[YTPS] Summarize request: "${message.title}" (${message.text.length} chars)`,
-      );
-
-      handleSummarize(message.text, message.title)
-        .then(sendResponse)
-        .catch((err: Error) => {
-          console.error("[YTPS] Error:", err);
-          sendResponse({ success: false, error: err.message });
-        });
-
-      return true;
+      if (message.type === "FOLLOW_UP") {
+        handleFollowUp(message.messages, message.captions, message.title)
+          .then(sendResponse)
+          .catch((err: Error) => {
+            sendResponse({ success: false, error: err.message });
+          });
+        return true;
+      }
     },
   );
 });
@@ -48,13 +58,30 @@ async function handleSummarize(
     };
   }
 
-  const summary = await summarize(
-    text,
+  const summary = await summarize(text, title, settings.apiKey, settings.model);
+  return { success: true, summary };
+}
+
+async function handleFollowUp(
+  messages: Message[],
+  captions: string,
+  title: string,
+): Promise<SummarizeResponse> {
+  const settings = await settingsStorage.getValue();
+
+  if (!settings.apiKey) {
+    return {
+      success: false,
+      error: "No API key configured. Click the extension icon to set it up.",
+    };
+  }
+
+  const summary = await followUp(
+    messages,
+    captions,
     title,
     settings.apiKey,
     settings.model,
-    settings.customPrompt,
   );
-
   return { success: true, summary };
 }

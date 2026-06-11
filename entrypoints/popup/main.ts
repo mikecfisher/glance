@@ -1,13 +1,9 @@
 import { settingsStorage } from "@/utils/storage";
-import { AVAILABLE_MODELS, DEFAULT_PROMPT } from "@/utils/constants";
+import { AVAILABLE_MODELS } from "@/utils/constants";
 
 const apiKeyInput = document.getElementById("api-key") as HTMLInputElement;
 const modelSelect = document.getElementById("model") as HTMLSelectElement;
-const promptTextarea = document.getElementById("prompt") as HTMLTextAreaElement;
 const saveBtn = document.getElementById("save-btn") as HTMLButtonElement;
-const resetPromptBtn = document.getElementById(
-  "reset-prompt",
-) as HTMLButtonElement;
 const statusEl = document.getElementById("status") as HTMLDivElement;
 
 // Populate model dropdown
@@ -22,7 +18,6 @@ for (const model of AVAILABLE_MODELS) {
 settingsStorage.getValue().then((settings) => {
   apiKeyInput.value = settings.apiKey;
   modelSelect.value = settings.model;
-  promptTextarea.value = settings.customPrompt;
 });
 
 saveBtn.addEventListener("click", async () => {
@@ -35,14 +30,9 @@ saveBtn.addEventListener("click", async () => {
   await settingsStorage.setValue({
     apiKey,
     model: modelSelect.value,
-    customPrompt: promptTextarea.value.trim() || DEFAULT_PROMPT,
   });
 
   showStatus("Settings saved!");
-});
-
-resetPromptBtn.addEventListener("click", () => {
-  promptTextarea.value = DEFAULT_PROMPT;
 });
 
 function showStatus(message: string, isError = false) {
